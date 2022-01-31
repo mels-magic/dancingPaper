@@ -12,14 +12,13 @@
 Scheduler userScheduler; // to control your personal task
 
 Task taskRemoteControl(TASK_SECOND * 1, TASK_FOREVER, &RemoteControl::run);
+Task taskMotorControl(0, TASK_FOREVER, &Motor::run);
 
 void setup()
 {
   Serial.begin(115200);
 
   BoardAddress::init();
-  Motor::init();
-  Network::init(&userScheduler);
 
   if (BoardAddress::isRemoteControl)
   {
@@ -28,11 +27,19 @@ void setup()
     userScheduler.addTask(taskRemoteControl);
     taskRemoteControl.enable();
   }
+  else
+  {
+    Motor::init();
+
+    userScheduler.addTask(taskMotorControl);
+    taskMotorControl.enable();
+  }
+
+  Network::init(&userScheduler);
 }
 
 void loop()
 {
   // it will run the user scheduler as well
   Network::run();
-  Motor::run();
 }
