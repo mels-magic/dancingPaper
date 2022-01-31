@@ -22,8 +22,8 @@ private:
     ParseJson() = default;
 
 public:
-    static String serialize(motorParameters params);
-    static motorParameters deserialize(String msg);
+    static String serialize(message params);
+    static message deserialize(String msgStr);
 
 private:
     static StaticJsonDocument<STATIC_JSON_DOCUMENT_SIZE> doc;
