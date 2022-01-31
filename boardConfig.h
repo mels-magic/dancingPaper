@@ -10,6 +10,8 @@
 #define MESH_PASSWORD "somethingSneaky"
 #define MESH_PORT 5555
 
+#define ADDRESS_OF_REMOTE_CONTROLLER 1
+
 #define ADDRESS_PIN_0 0
 #define ADDRESS_PIN_1 1
 #define ADDRESS_PIN_2 2

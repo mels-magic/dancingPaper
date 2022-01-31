@@ -25,4 +25,9 @@ int BoardAddress::getAddress()
     return address;
 }
 
+bool BoardAddress::isRemoteControl()
+{
+    return BoardAddress::getAddress() == ADDRESS_OF_REMOTE_CONTROLLER;
+}
+
 int BoardAddress::addressPins[BOARD_ADDRESS_PIN_COUNT] = {ADDRESS_PIN_7, ADDRESS_PIN_6, ADDRESS_PIN_5, ADDRESS_PIN_4, ADDRESS_PIN_3, ADDRESS_PIN_2, ADDRESS_PIN_1, ADDRESS_PIN_0};

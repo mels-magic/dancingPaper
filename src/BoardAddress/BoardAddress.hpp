@@ -16,6 +16,7 @@ private:
 public:
     static void init();
     static int getAddress();
+    static bool isRemoteControl();
 
 private:
     static int addressPins[BOARD_ADDRESS_PIN_COUNT];
