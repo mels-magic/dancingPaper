@@ -51,7 +51,7 @@ void Network::receivedCallback(uint32_t from, String &msgStr)
 
     message msgJson = ParseJson::deserialize(msgStr);
 
-    if (!msgJson.isValid || !(msgJson.destAddr == BoardAddress::getAddress() || msgJson.destAddr == 255))
+    if (!msgJson.isValid || !(msgJson.destAddr == BoardAddress::getAddress() || msgJson.destAddr == BROADCAST_ADDRESS))
         return;
 
     switch (msgJson.msgType)
