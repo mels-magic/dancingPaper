@@ -24,11 +24,5 @@ private:
     static void changedConnectionCallback();
     static void nodeTimeAdjustedCallback(int32_t offset);
 
-    // Allocate the JSON document
-    //
-    // Inside the brackets, 256 is the RAM allocated to this document.
-    // Don't forget to change this value to match your requirement.
-    // Use arduinojson.org/v6/assistant to compute the capacity.
-    //static StaticJsonDocument<256> doc;
     static painlessMesh mesh;
 };
