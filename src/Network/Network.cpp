@@ -6,7 +6,10 @@
  */
 #include "Network.hpp"
 #include "../ParseJson/ParseJson.hpp"
+#include "../../motorParameters.h"
+#include "../Motor/Motor.hpp"
 #include "../../boardConfig.h"
+#include "../BoardAddress/BoardAddress.hpp"
 
 void Network::init(Scheduler *userScheduler)
 {
@@ -39,37 +42,33 @@ void Network::run()
 
 void Network::sendMessage(String msg)
 {
-    //String msg = "Hello from node ";
-    //msg += Network::mesh.getNodeId();
     Network::mesh.sendBroadcast(msg);
-    //taskSendMessage.setInterval(random(TASK_SECOND * 1, TASK_SECOND * 5));
 }
 
-// Needed for painless library
-void Network::receivedCallback(uint32_t from, String &msg)
+void Network::receivedCallback(uint32_t from, String &msgStr)
 {
-    Serial.printf("startHere: Received from %u msg=%s\n", from, msg.c_str());
+    Serial.printf("startHere: Received from %u msg=%s\n", from, msgStr.c_str());
 
-    // Deserialize the JSON document
-    //doc.clear();
-    //DeserializationError error = deserializeJson(Network::doc, msg.c_str());
+    message msgJson = ParseJson::deserialize(msgStr);
 
-    // Test if parsing succeeds.
-    // if (error)
-    // {
-    //     Serial.print(F("deserializeJson() failed: "));
-    //     Serial.println(error.f_str());
-    //     return;
-    // }
-    // motorSpeed = doc["speed"];
-    // if (motorSpeed > 255)
-    //     motorSpeed = 255;
-    // if (motorSpeed < -255)
-    //     motorSpeed = -255;
-    // motorCycleTime_sec = doc["cycleTime_sec"];
-    // motorBaseDutyCycle = doc["baseDutyCycle"];
-    // motorCycleJitter = doc["cycleJitter"];
-    // motorDutyCycleJitter = doc["dutyCycleJitter"];
+    if (!msgJson.isValid || !(msgJson.destAddr == BoardAddress::getAddress() || msgJson.destAddr == 255))
+        return;
+
+    switch (msgJson.msgType)
+    {
+    case messageType::ACTION_START:
+        Motor::turnOn();
+        break;
+    case messageType::CONFIG:
+        Motor::setMotorParameters(msgJson);
+        break;
+    case messageType::ACTION_OFF:
+        Motor::turnOff;
+        break;
+    case messageType::ACTION_STOP:
+        Motor::stop();
+        break;
+    }
 }
 
 void Network::newConnectionCallback(uint32_t nodeId)
@@ -84,5 +83,4 @@ void Network::nodeTimeAdjustedCallback(int32_t offset)
     Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(), offset);
 }
 
-//StaticJsonDocument<256> Network::doc;
 painlessMesh Network::mesh;
