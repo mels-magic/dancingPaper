@@ -8,8 +8,14 @@
 
 void RemoteControl::init()
 {
+    // TODO: init IO
 }
 
 void RemoteControl::run()
 {
+    // TODOs:
+    // check inputs
+    // update uotputs
+    // send config changes
+    // select and play patterns
 }
