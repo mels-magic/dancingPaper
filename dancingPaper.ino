@@ -7,11 +7,11 @@
 #include "src/Network/Network.hpp"
 #include "src/BoardAddress/BoardAddress.hpp"
 #include "src/Motor/Motor.hpp"
+#include "src/RemoteControl/RemoteControl.hpp"
 
 Scheduler userScheduler; // to control your personal task
 
-
-//Task taskModeMotorControl(TASK_SECOND * 1, TASK_FOREVER, &Motor::run);
+Task taskRemoteControl(TASK_SECOND * 1, TASK_FOREVER, &RemoteControl::run);
 
 void setup()
 {
@@ -21,15 +21,13 @@ void setup()
   Motor::init();
   Network::init(&userScheduler);
 
-  // userScheduler.addTask(taskSendMessage);
-  // userScheduler.addTask(taskModeMotorControl);
+  if (BoardAddress::isRemoteControl)
+  {
+    RemoteControl::init();
 
-  // //if(digitalRead(SENSE_CONTROLLER_PIN) == LOW)
-  // taskModeController.enable();
-  // //else
-  // taskModeMotorControl.enable();
-
-  // taskSendMessage.enable();
+    userScheduler.addTask(taskRemoteControl);
+    taskRemoteControl.enable();
+  }
 }
 
 void loop()
