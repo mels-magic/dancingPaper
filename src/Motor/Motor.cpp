@@ -24,7 +24,7 @@ void Motor::init()
     }
 }
 
-void Motor::setMotorParameters(motorParameters param)
+void Motor::setMotorParameters(message param)
 {
     Motor::param = param;
 }
@@ -76,7 +76,7 @@ void Motor::stop()
         motorController.begin(0);
 }
 
-motorParameters Motor::param;
+message Motor::param;
 FadeLed Motor::motorControl[MOTOR_CONTROL_ELEMENT_COUNT] = {MOTOR_A_PWN_PIN, MOTOR_B_PWM_PIN};
 bool Motor::isRunning;
 unsigned long Motor::turnOffAtMillis;

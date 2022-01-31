@@ -17,16 +17,16 @@ private:
 
 public:
     static void init();
-    static void setMotorParameters(motorParameters param);
+    static void setMotorParameters(message param);
 
     static void run();
 
-    static void turnOn(); // ramp on time, ramp off time, on time, speed
+    static void turnOn();
     static void turnOff();
     static void stop();
 
 private:
-    static motorParameters param;
+    static message param;
     static FadeLed motorControl[MOTOR_CONTROL_ELEMENT_COUNT];
     static bool isRunning;
     static unsigned long turnOffAtMillis;
