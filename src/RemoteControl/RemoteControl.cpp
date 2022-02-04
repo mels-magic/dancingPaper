@@ -5,6 +5,7 @@
  *      Author: Melanie Magin
  */
 #include "RemoteControl.hpp"
+#include <Arduino.h>
 
 void RemoteControl::init()
 {
@@ -13,6 +14,7 @@ void RemoteControl::init()
 
 void RemoteControl::run()
 {
+    Serial.print("Romote run\r\n");
     // TODOs:
     // check inputs
     // update uotputs
