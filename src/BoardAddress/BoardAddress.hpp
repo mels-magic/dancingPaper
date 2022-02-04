@@ -6,7 +6,7 @@
  */
 #pragma once
 
-#define BOARD_ADDRESS_PIN_COUNT 8
+#define BOARD_ADDRESS_PIN_COUNT 5
 
 class BoardAddress
 {
