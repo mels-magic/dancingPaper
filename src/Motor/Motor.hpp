@@ -30,4 +30,5 @@ private:
     static FadeLed motorControl[MOTOR_CONTROL_ELEMENT_COUNT];
     static bool isRunning;
     static unsigned long turnOffAtMillis;
+    static unsigned long lastTimestamp;
 };
