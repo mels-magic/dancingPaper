@@ -23,7 +23,7 @@
 //#define ADDRESS_PIN_7 1
 
 #define MOTOR_A_DIRPIN 0
-#define MOTOR_A_PWN_PIN 5
+#define MOTOR_A_PWM_PIN 5
 
 #define MOTOR_B_DIRPIN 2
 #define MOTOR_B_PWM_PIN 4

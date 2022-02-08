@@ -5,10 +5,9 @@
  *      Author: Melanie Magin
  */
 #pragma once
-#include <FadeLed.h>
 #include "../../motorParameters.h"
 
-#define MOTOR_CONTROL_ELEMENT_COUNT 2
+#define MOTOR_FADE_TIME_DELTA_MS 100
 
 class Motor
 {
@@ -26,9 +25,13 @@ public:
     static void stop();
 
 private:
+    static void fade();
+
     static message param;
-    static FadeLed motorControl[MOTOR_CONTROL_ELEMENT_COUNT];
     static bool isRunning;
     static unsigned long turnOffAtMillis;
     static unsigned long lastTimestamp;
+    static int fadeIncrement;
+    static int currentSpeed;
+    static int targetSpeed;
 };

@@ -16,27 +16,20 @@ void Motor::init()
     pinMode(16, OUTPUT);
     pinMode(MOTOR_A_DIRPIN, OUTPUT);
     pinMode(MOTOR_B_DIRPIN, OUTPUT);
-    pinMode(MOTOR_A_PWN_PIN, OUTPUT);
+    pinMode(MOTOR_A_PWM_PIN, OUTPUT);
     pinMode(MOTOR_B_PWM_PIN, OUTPUT);
 
     digitalWrite(MOTOR_A_DIRPIN, LOW);
     digitalWrite(MOTOR_B_DIRPIN, LOW);
 
-    Motor::param.onTime_ms = 10000;
-    Motor::param.rampDownTime_ms = 50;
-    Motor::param.rampUpTime_ms = 50;
-    Motor::param.direction = false;
-    Motor::param.speed = 50;
+    Motor::param.onTime_ms = 15000;
+    Motor::param.rampDownTime_ms = 5000;
+    Motor::param.rampUpTime_ms = 5000;
+    Motor::param.speed = 200;
     Motor::param.speedVariancePercent = 0;
 
-    // for (FadeLed motorController : Motor::motorControl)
-    // {
-    // //    motorController.begin(0);
-    //     Serial.print("x ");
-    // }
-
-    Motor::turnOn();
     Serial.print("Init motor.\r\n");
+    Motor::turnOn();
     Motor::lastTimestamp = millis();
 }
 
@@ -48,21 +41,14 @@ void Motor::setMotorParameters(message param)
 
 void Motor::run()
 {
-    //FadeLed::update();
-
     if (Motor::isRunning && Motor::turnOffAtMillis < millis())
         Motor::turnOff();
 
     static int val = 0;
-    if(Motor::lastTimestamp + 1000 < millis())
+    if (Motor::lastTimestamp + MOTOR_FADE_TIME_DELTA_MS < millis())
     {
-        analogWrite(16,val);
-        analogWrite(5,val);
-        analogWrite(4,val);
-        
-        val += 1;
-        if(val > 200)
-            val = 0;
+        Motor::lastTimestamp = millis();
+        Motor::fade();
     }
 }
 
@@ -70,52 +56,75 @@ void Motor::turnOn()
 {
     Serial.print("turnOn\r\n");
     Motor::isRunning = true;
-    // if (Motor::param.direction)
-    // {
-    //     digitalWrite(MOTOR_A_DIRPIN, LOW);
-    //     digitalWrite(MOTOR_B_DIRPIN, LOW);
-    // }
-    // else
-    // {
-        digitalWrite(MOTOR_A_DIRPIN, HIGH);
-        digitalWrite(MOTOR_B_DIRPIN, HIGH);
-    //}
 
     Motor::turnOffAtMillis = millis() + Motor::param.onTime_ms;
-
-    for (FadeLed motorController : Motor::motorControl)
-    {
-        motorController.setTime(Motor::param.rampUpTime_ms, true);
-        motorController.set(Motor::param.speed);
-    }
-    //Motor::motorControl[0].setTime(Motor::param.rampUpTime_ms, true);
-    //Motor::motorControl[0].set(Motor::param.speed);
-    //Motor::motorControl[1].setTime(Motor::param.rampUpTime_ms, true);
-    //Motor::motorControl[1].set(Motor::param.speed);
+    Motor::targetSpeed = (Motor::param.speed < 255) ? Motor::param.speed : 255;
+    int intervals = Motor::param.rampUpTime_ms / MOTOR_FADE_TIME_DELTA_MS;
+    Motor::fadeIncrement = Motor::targetSpeed / intervals;
+    Motor::fadeIncrement = (Motor::fadeIncrement > 0) ? Motor::fadeIncrement : 1;
 }
 
 void Motor::turnOff()
 {
     Serial.print("turnOff\r\n");
     Motor::isRunning = false;
-    for (FadeLed motorController : Motor::motorControl)
-    {
-        motorController.setTime(Motor::param.rampDownTime_ms, true);
-        motorController.off();
-    }
-    digitalWrite(MOTOR_A_DIRPIN, LOW);
-    digitalWrite(MOTOR_B_DIRPIN, LOW);
+    
+    Motor::targetSpeed = 0;
+    int intervals = Motor::param.rampUpTime_ms / MOTOR_FADE_TIME_DELTA_MS;
+    Motor::fadeIncrement = Motor::currentSpeed / intervals;
+    Motor::fadeIncrement = (Motor::fadeIncrement > 0) ? Motor::fadeIncrement : 1;
 }
 
 void Motor::stop()
 {
     Serial.print("stop\r\n");
-    for (FadeLed motorController : Motor::motorControl)
-        motorController.begin(0);
+    digitalWrite(MOTOR_A_DIRPIN, LOW);
+    digitalWrite(MOTOR_B_DIRPIN, LOW);
+    digitalWrite(MOTOR_A_PWM_PIN, LOW);
+    digitalWrite(MOTOR_B_PWM_PIN, LOW);
+
+    Motor::currentSpeed = 0;
+    Motor::targetSpeed = 0;
+}
+
+void Motor::fade()
+{
+    Serial.print("\r\n");
+    Serial.print("current:");
+    Serial.print(Motor::currentSpeed);
+    Serial.print(",");
+    Serial.print("target:");
+    Serial.print(Motor::targetSpeed);
+    Serial.print("\r\n");
+    if (Motor::currentSpeed == Motor::targetSpeed)
+        return;
+
+    int direction = (Motor::targetSpeed - Motor::currentSpeed >= 0) ? 1 : -1;
+    int increment = fadeIncrement * direction;
+    Motor::currentSpeed += increment;
+
+    if (abs(Motor::targetSpeed - Motor::currentSpeed) < abs(increment / 2))
+        Motor::currentSpeed = Motor::targetSpeed;
+
+    if (Motor::currentSpeed > 0)
+    {
+        digitalWrite(MOTOR_A_DIRPIN, HIGH);
+        digitalWrite(MOTOR_B_DIRPIN, HIGH);
+    }
+    else
+    {
+        digitalWrite(MOTOR_A_DIRPIN, LOW);
+        digitalWrite(MOTOR_B_DIRPIN, LOW);
+    }
+    analogWrite(MOTOR_A_PWM_PIN, abs(Motor::currentSpeed));
+    analogWrite(MOTOR_B_PWM_PIN, abs(Motor::currentSpeed));
+    analogWrite(16, abs(Motor::currentSpeed));
 }
 
 message Motor::param;
-FadeLed Motor::motorControl[MOTOR_CONTROL_ELEMENT_COUNT] = {MOTOR_A_PWN_PIN, MOTOR_B_PWM_PIN};
 bool Motor::isRunning;
 unsigned long Motor::turnOffAtMillis;
 unsigned long Motor::lastTimestamp;
+int Motor::fadeIncrement;
+int Motor::currentSpeed;
+int Motor::targetSpeed;
