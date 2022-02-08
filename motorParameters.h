@@ -23,7 +23,6 @@ struct message
     unsigned int rampUpTime_ms;
     unsigned int onTime_ms;
     unsigned int rampDownTime_ms;
-    byte speed;
-    bool direction;
+    int speed;
     int speedVariancePercent;
 };

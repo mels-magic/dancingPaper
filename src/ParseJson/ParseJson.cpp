@@ -18,7 +18,6 @@ String ParseJson::serialize(message params)
     ParseJson::doc["onTime_ms"] = params.onTime_ms;
     ParseJson::doc["rampDownTime_ms"] = params.rampDownTime_ms;
     ParseJson::doc["speed"] = params.speed;
-    ParseJson::doc["direction"] = params.direction;
     ParseJson::doc["speedVariancePercent"] = params.speedVariancePercent;
 
     String ret;
@@ -51,7 +50,6 @@ message ParseJson::deserialize(String msgStr)
     params.onTime_ms = ParseJson::doc["onTime_ms"];
     params.rampDownTime_ms = ParseJson::doc["rampDownTime_ms"];
     params.speed = ParseJson::doc["speed"];
-    params.direction = ParseJson::doc["direction"];
     params.speedVariancePercent = ParseJson::doc["speedVariancePercent"];
 
     params.isValid = true;
