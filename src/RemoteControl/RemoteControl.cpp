@@ -15,8 +15,6 @@ void RemoteControl::init()
 {
     pinMode(REMOTE_LED_1_PIN, OUTPUT);
     pinMode(REMOTE_SWITCH_PIN, INPUT_PULLUP);
-    //pinMode(REMOTE_SWITCH_PIN_GND, OUTPUT);
-    //digitalWrite(REMOTE_SWITCH_PIN_GND, LOW);
 
     RemoteControl::initChoreograpy();
 }
