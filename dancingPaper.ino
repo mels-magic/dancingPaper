@@ -1,7 +1,9 @@
 //************************************************************
 //
 // has OTA support and can be updated remotely
+// (see painlessMesh documentation)
 //
+// Author: Melanie Magin
 //************************************************************
 #include <painlessMesh.h>
 #include "src/Network/Network.hpp"
