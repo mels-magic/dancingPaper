@@ -88,13 +88,6 @@ void Motor::stop()
 
 void Motor::fade()
 {
-    Serial.print("\r\n");
-    Serial.print("current:");
-    Serial.print(Motor::currentSpeed);
-    Serial.print(",");
-    Serial.print("target:");
-    Serial.print(Motor::targetSpeed);
-    Serial.print("\r\n");
     if (Motor::currentSpeed == Motor::targetSpeed)
         return;
 
