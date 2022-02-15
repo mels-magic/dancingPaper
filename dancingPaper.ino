@@ -13,8 +13,8 @@
 
 Scheduler userScheduler; // to control your personal task
 
-Task taskRemoteControl(TASK_SECOND * 1, TASK_FOREVER, &RemoteControl::run);
-Task taskMotorControl(5, TASK_FOREVER, &Motor::run);
+Task taskRemoteControl(50, TASK_FOREVER, &RemoteControl::run);
+Task taskMotorControl(50, TASK_FOREVER, &Motor::run);
 
 void setup()
 {
