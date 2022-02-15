@@ -13,7 +13,6 @@ void Motor::init()
     Motor::turnOffAtMillis = 0;
     Motor::isRunning = false;
 
-    pinMode(16, OUTPUT);
     pinMode(MOTOR_A_DIRPIN, OUTPUT);
     pinMode(MOTOR_B_DIRPIN, OUTPUT);
     pinMode(MOTOR_A_PWM_PIN, OUTPUT);
@@ -118,7 +117,6 @@ void Motor::fade()
     }
     analogWrite(MOTOR_A_PWM_PIN, abs(Motor::currentSpeed));
     analogWrite(MOTOR_B_PWM_PIN, abs(Motor::currentSpeed));
-    analogWrite(16, abs(Motor::currentSpeed));
 }
 
 message Motor::param;
