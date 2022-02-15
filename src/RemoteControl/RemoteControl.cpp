@@ -153,7 +153,7 @@ void RemoteControl::sequenceStep()
     static bool doPrintStr = true;
     if (allUpdated && doPrintStr)
     {
-        Serial.println("allUpdated");
+        Serial.println("--- allUpdated ---");
         doPrintStr = false;
     }
     if (!allUpdated)
