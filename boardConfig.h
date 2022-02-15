@@ -7,8 +7,8 @@
 #pragma once
 
 // set per devicebefore flashing:
-#define ADDRESS_NUMBERR_ON_LABEL 2
-#define IS_REMOTE_CONTROLLER true // set true / false
+#define ADDRESS_NUMBERR_ON_LABEL 0
+#define IS_REMOTE_CONTROLLER false // set true / false
 
 #define MESH_PREFIX "whateverYouLike"
 #define MESH_PASSWORD "somethingSneaky"
