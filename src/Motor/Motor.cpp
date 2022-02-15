@@ -28,7 +28,7 @@ void Motor::init()
     Motor::param.speedVariancePercent = 0;
 
     Serial.print("Init motor.\r\n");
-    Motor::turnOn();
+    //Motor::turnOn();
     Motor::lastTimestamp = millis();
 }
 
