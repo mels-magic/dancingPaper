@@ -6,6 +6,9 @@
  */
 #pragma once
 
+#define ADDRESS_OF_REMOTE_CONTROLLER 1
+#define BROADCAST_ADDRESS 255
+
 #define BOARD_ADDRESS_PIN_COUNT 5
 
 class BoardAddress
