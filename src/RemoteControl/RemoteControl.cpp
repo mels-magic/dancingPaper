@@ -88,11 +88,12 @@ bool RemoteControl::isActive()
 
 bool RemoteControl::updateRotors()
 {
-    Network::sendMessage(RemoteControl::messages[RemoteControl::rotorIdxInSequence]);
-
-    RemoteControl::rotorIdxInSequence++;
     if (RemoteControl::rotorIdxInSequence >= MAX_ROTOR_INSTALLATION_COUNT)
         return true;
+    Network::sendMessage(RemoteControl::messages[RemoteControl::rotorIdxInSequence]);
+    Serial.print("updated rotor ");
+    Serial.println(RemoteControl::rotorIdxInSequence);
+    RemoteControl::rotorIdxInSequence++;
     return false;
 }
 
@@ -114,7 +115,7 @@ void RemoteControl::sequenceStep()
         break;
     case RemoteControl::status::DEACTIVATING:
         Serial.println("Remote: DEACTIVATING");
-        RemoteControl::rotorCommand(BROADCAST_ADDRESS, messageType::ACTION_STOP);
+        RemoteControl::rotorCommand(BROADCAST_ADDRESS, messageType::ACTION_OFF);
         digitalWrite(REMOTE_LED_1_PIN, LOW);
         RemoteControl::runStatus = RemoteControl::status::OFF;
         break;
@@ -134,6 +135,7 @@ void RemoteControl::sequenceStep()
         break;
     case RemoteControl::status::START_SEQUENCE_PAUSE:
         Serial.println("Remote: START_SEQUENCE_PAUSE");
+        RemoteControl::rotorCommand(BROADCAST_ADDRESS, messageType::ACTION_STOP);
         allUpdated = false;
         RemoteControl::rotorIdxInSequence = 0;
         RemoteControl::lastTimestamp = millis();
@@ -157,34 +159,34 @@ void RemoteControl::sequenceStep()
     if (!allUpdated)
         doPrintStr = true;
 
-    // unsigned long msInState = millis() - RemoteControl::lastTimestamp;
-    // if (msInState % 1000 == 0)
-    // {
-    //     unsigned long msRemaining = 0;
-    //     if (RemoteControl::runStatus == RemoteControl::status::SEQUENCE_PAUSE)
-    //     {
-    //         msRemaining = RemoteControl::sequencePauseDuration_ms - msInState;
-    //         Serial.print("SEQUENCE_PAUSE: seconds remaining: ");
-    //     }
-    //     else if (RemoteControl::runStatus == RemoteControl::status::SEQUENCE_ACTIVE)
-    //     {
-    //         msRemaining = RemoteControl::sequenceActiveDuration_ms - msInState;
-    //         Serial.print("SEQUENCE_ACTIVE: seconds remaining: ");
-    //     }
-    //     Serial.println(msRemaining / 1000);
-    // }
+    unsigned long msInState = millis() - RemoteControl::lastTimestamp;
+    if (msInState % 1000 == 0 && RemoteControl::runStatus > status::DEACTIVATING)
+    {
+        unsigned long msRemaining = 0;
+        if (RemoteControl::runStatus == RemoteControl::status::SEQUENCE_PAUSE)
+        {
+            msRemaining = RemoteControl::sequencePauseDuration_ms - msInState;
+            Serial.print("SEQUENCE_PAUSE: seconds remaining: ");
+        }
+        else if (RemoteControl::runStatus == RemoteControl::status::SEQUENCE_ACTIVE)
+        {
+            msRemaining = RemoteControl::sequenceActiveDuration_ms - msInState;
+            Serial.print("SEQUENCE_ACTIVE: seconds remaining: ");
+        }
+        Serial.println(msRemaining / 1000);
+    }
 }
 
 bool RemoteControl::sequenceActiveStep()
 {
-    if (RemoteControl::lastTimestamp + RemoteControl::activationDelays_ms[RemoteControl::rotorIdxInSequence] > millis())
+    if (RemoteControl::rotorIdxInSequence >= MAX_ROTOR_INSTALLATION_COUNT)
+        return true;
+    if (RemoteControl::lastTimestamp + RemoteControl::activationDelays_ms[RemoteControl::rotorIdxInSequence] < millis())
     {
         Serial.print("ACTION_START for rotor ");
         Serial.println(RemoteControl::rotorIdxInSequence);
         RemoteControl::rotorCommand(RemoteControl::rotorIdxInSequence, messageType::ACTION_START);
         RemoteControl::rotorIdxInSequence++;
-        if (RemoteControl::rotorIdxInSequence >= MAX_ROTOR_INSTALLATION_COUNT)
-            return true;
     }
     return false;
 }
