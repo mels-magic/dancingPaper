@@ -21,7 +21,7 @@ void setup()
 
   BoardAddress::init();
 
-  if (!BoardAddress::isRemoteControl())
+  if (BoardAddress::isRemoteControl())
   {
     Serial.print("is remote\r\n");
     RemoteControl::init();
