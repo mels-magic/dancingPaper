@@ -8,10 +8,12 @@
 
 class RemoteControl
 {
-private:
-    RemoteControl() = default;
-
 public:
     static void init();
     static void run();
+
+private:
+    RemoteControl() = default;
+
+    static unsigned long lastTimestamp;
 };

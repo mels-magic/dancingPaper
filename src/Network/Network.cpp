@@ -6,7 +6,6 @@
  */
 #include "Network.hpp"
 #include "../ParseJson/ParseJson.hpp"
-#include "../../motorParameters.h"
 #include "../Motor/Motor.hpp"
 #include "../../boardConfig.h"
 #include "../BoardAddress/BoardAddress.hpp"
@@ -40,9 +39,9 @@ void Network::run()
     Network::mesh.update();
 }
 
-void Network::sendMessage(String msg)
+void Network::sendMessage(message params)
 {
-    Network::mesh.sendBroadcast(msg);
+    Network::mesh.sendBroadcast(ParseJson::serialize(params));
 }
 
 void Network::receivedCallback(uint32_t from, String &msgStr)

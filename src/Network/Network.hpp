@@ -6,6 +6,7 @@
  */
 #pragma once
 #include <painlessMesh.h>
+#include "../../motorParameters.h"
 
 class Network
 {
@@ -16,7 +17,7 @@ public:
     static void init(Scheduler *userScheduler);
     static void run();
 
-    static void sendMessage(String msg);
+    static void sendMessage(message params);
 
 private:
     static void receivedCallback(uint32_t from, String &msg);

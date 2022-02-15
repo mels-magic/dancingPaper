@@ -12,7 +12,7 @@
 Scheduler userScheduler; // to control your personal task
 
 Task taskRemoteControl(TASK_SECOND * 1, TASK_FOREVER, &RemoteControl::run);
-Task taskMotorControl(0, TASK_FOREVER, &Motor::run);
+Task taskMotorControl(5, TASK_FOREVER, &Motor::run);
 
 void setup()
 {
@@ -21,7 +21,7 @@ void setup()
 
   BoardAddress::init();
 
-  if (BoardAddress::isRemoteControl())
+  if (!BoardAddress::isRemoteControl())
   {
     Serial.print("is remote\r\n");
     RemoteControl::init();
