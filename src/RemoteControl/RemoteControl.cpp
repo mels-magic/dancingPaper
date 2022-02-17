@@ -31,26 +31,8 @@ void RemoteControl::run()
 
 void RemoteControl::initChoreograpy()
 {
-    RemoteControl::sequenceActiveDuration_ms = 15000;
-    RemoteControl::sequencePauseDuration_ms = 5000;
-
-    // activationDelays_ms, rampOnTime_ms, onTime_ms, rampOffTime_ms, speed
-    long rotorDatasets[MAX_ROTOR_INSTALLATION_COUNT][5] = {
-        {0, 5000, 15000, 5000, 150},
-        {5000, 2000, 6000, 2000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150},
-        {0, 8000, 60000, 8000, 150}};
+    RemoteControl::sequenceActiveDuration_ms = SEQUENCE_ACTIVE_DURATION_ms;
+    RemoteControl::sequencePauseDuration_ms = SEQUENCE_PAUSE_DURATION_ms;
 
     for (int i = 0; i < MAX_ROTOR_INSTALLATION_COUNT; i++)
     {

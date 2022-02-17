@@ -6,8 +6,7 @@
  */
 #pragma once
 #include "../../motorParameters.h"
-
-#define MAX_ROTOR_INSTALLATION_COUNT 15
+#include "../../choreogrphy.h"
 
 class RemoteControl
 {
