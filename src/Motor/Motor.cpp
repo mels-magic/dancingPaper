@@ -28,13 +28,15 @@ void Motor::init()
     Motor::param.speedVariancePercent = 0;
 
     Serial.print("Init motor.\r\n");
-    //Motor::turnOn();
+    // Motor::turnOn();
     Motor::lastTimestamp = millis();
 }
 
 void Motor::setMotorParameters(message param)
 {
     Motor::param = param;
+    Motor::param.speed = (Motor::param.speed < -255) ? -255 : Motor::param.speed;
+    Motor::param.speed = (Motor::param.speed < 255) ? Motor::param.speed : 255;
     Serial.print("M_setParam\r\n");
 }
 
@@ -67,7 +69,7 @@ void Motor::turnOff()
 {
     Serial.print("turnOff\r\n");
     Motor::isRunning = false;
-    
+
     Motor::targetSpeed = 0;
     int intervals = Motor::param.rampUpTime_ms / MOTOR_FADE_TIME_DELTA_MS;
     Motor::fadeIncrement = Motor::currentSpeed / intervals;
