@@ -59,7 +59,7 @@ void RemoteControl::setRotorConfig(unsigned int destAddr, unsigned int activatio
     msg.rampDownTime_ms = rampDownTime_ms;
     msg.speed = speed;
 
-    RemoteControl::messages[destAddr];
+    RemoteControl::messages[destAddr] = msg;
     RemoteControl::activationDelays_ms[destAddr] = activationDelay_ms;
 }
 
@@ -85,6 +85,11 @@ void RemoteControl::rotorCommand(unsigned int rotorIdx, messageType command)
     msg.srcAddr = ADDRESS_OF_REMOTE_CONTROLLER;
     msg.destAddr = (rotorIdx >= BROADCAST_ADDRESS) ? BROADCAST_ADDRESS : rotorIdx;
     msg.msgType = command;
+    msg.onTime_ms = 0;
+    msg.rampDownTime_ms = 0;
+    msg.rampUpTime_ms = 0;
+    msg.speed = 0;
+    msg.speedVariancePercent = 0;
     Network::sendMessage(msg);
 }
 
