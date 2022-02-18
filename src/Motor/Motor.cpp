@@ -112,8 +112,10 @@ void Motor::fade()
         digitalWrite(MOTOR_A_DIRPIN, LOW);
         digitalWrite(MOTOR_B_DIRPIN, LOW);
     }
-    analogWrite(MOTOR_A_PWM_PIN, abs(Motor::currentSpeed));
-    analogWrite(MOTOR_B_PWM_PIN, abs(Motor::currentSpeed));
+    int currentSpeed = (abs(Motor::currentSpeed) > MIN_PWM_VALUE) ? abs(Motor::currentSpeed) : (abs(Motor::currentSpeed) > MIN_PWM_VALUE / 2) ? MIN_PWM_VALUE
+                                                                                                                                              : 0;
+    analogWrite(MOTOR_A_PWM_PIN, currentSpeed);
+    analogWrite(MOTOR_B_PWM_PIN, currentSpeed);
 }
 
 message Motor::param;

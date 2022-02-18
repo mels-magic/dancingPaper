@@ -8,6 +8,7 @@
 #include "../../motorParameters.h"
 
 #define MOTOR_FADE_TIME_DELTA_MS 100
+#define MIN_PWM_VALUE 60
 
 class Motor
 {
