@@ -33,7 +33,8 @@ void setup()
   }
   else
   {
-    Serial.print("is motor\r\n");
+    Serial.print("is motor ");
+    Serial.println(BoardAddress::getAddress());
     Motor::init();
 
     userScheduler.addTask(taskMotorControl);
